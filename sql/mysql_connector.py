@@ -4,7 +4,14 @@ import mysql.connector
 
 load_dotenv()
 
-HOST = os.getenv('HOST'),
-USER = os.getenv('USER'),
-PASSWORD = os.getenv('PASSWORD'),
+HOST = os.getenv('HOST')
+USER = os.getenv('USER')
+PASSWORD = os.getenv('PASSWORD')
 
+
+
+mydb = mysql.connector.connect(
+    host=HOST,
+    user=USER,
+    password=PASSWORD
+)
