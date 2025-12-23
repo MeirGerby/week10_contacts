@@ -1,53 +1,44 @@
 from fastapi import FastAPI, HTTPException 
 import uvicorn
-from pydantic import BaseModel, Field
-from typing import Annotated, List
+from typing import List, Optional
+from model import Contact, CreateContact, UpdateContact
 
 app = FastAPI()
 
-class Contact(BaseModel):
-    id: int | None = None 
-    first_name: Annotated[str, Field(max_length=50)]
-    last_name: Annotated[str, Field(max_length=50)]
-    phone_number: Annotated[str, Field(max_length=20)] 
 
+ 
+contacts: list[Contact] = []
 
-    
-contacts: List[Contact] = []
+# @app.get('/contacts')
+def get_all_contacts() -> List[Contact]:
+    return contacts
 
-@app.get('/contacts')
-def get_all_contacts() -> list:
-    return contacts 
-
-
-
-@app.post("/contacts")
-def create_new_contact(contact: Contact):
+# @app.post("/contacts")
+def create_new_contact(contact: Contact) -> dict:
     contacts.append(contact)
     return {"message": "the contact added successfully",
             "contact id": contact.id}
 
-@app.put('/contacts/{id}')
-def update_existing_contact(id, contact: Contact):
-    for co in contacts:    
+# @app.put('/contacts/{id}')
+def update_existing_contact(id: int, contact: Contact) -> Optional[dict]: 
+    for i in range(len(contacts)):
         try:
-            if co.id == id:
-                contacts.append(contact)
-                return {"Message": "update successfully"}
+            if contacts[i].id == id:
+                contacts[i] = contact 
+                return {'contacts': contacts} 
         except:
-            raise HTTPException(status_code=404, detail="the ID is not found")
-                
-                
-@app.delete('/contacts/{id}')
-def delete_contact(id, contact: Contact):
-    for co in contacts:    
+            raise HTTPException(status_code=404, detail="The ID not found")
+
+# @app.delete('/contacts/{id}')
+def delete_contact(id: int, contact: Contact) -> Optional[dict]:
+    for i in range(len(contacts)):    
         try:
-            if co.id == id:
-                contacts.remove(co)
+            if contacts[i].id == id:
+                contacts.remove(contacts[i])
                 return {"Message": "remove successfully"}
         except:
             raise HTTPException(status_code=404, detail="the ID is not found")
-           
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8000)
+
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="localhost", port=8000)
