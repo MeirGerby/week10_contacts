@@ -16,7 +16,9 @@ class DBConnecotor:
     @classmethod
     def connect_to_db(cls):
         """connecting to mysql db"""
-        _connection = mysql.connector.connect(cls.HOST, cls.USER, cls.PASSWORD)
+        return mysql.connector.connect(cls.HOST, cls.USER, cls.PASSWORD)
+        
+        
 
 
     

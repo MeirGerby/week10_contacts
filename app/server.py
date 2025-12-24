@@ -1,41 +1,38 @@
 from fastapi import FastAPI, HTTPException 
 import uvicorn
 from typing import List, Optional
-from model import Contact
+from model import Contact 
+from manage_db import MannageDB
 
+cursor = MannageDB.create_corsor()
 
 app = FastAPI()
  
 @app.get('/contacts')
-def get_all_contacts() -> List[Contact]:
-    
-    return contacts
+def get_all_contacts():
+    return MannageDB.get_contacts(cursor)
 
 @app.post("/contacts")
-def create_new_contact(contact: Contact) -> dict:
-    contacts.append(contact)
-    return {"message": "the contact added successfully",
-            "contact id": contact.id}
-
+def create_new_contact(contact: Contact):
+    try:
+        MannageDB.create(cursor, contact.id, contact.first_name, contact.last_name, contact.phone_number)
+        return {"seccuss": f"contact id {contact.id}"}
+    except:
+        raise HTTPException(status_code=404, detail="The contact not found")
 @app.put('/contacts/{id}')
-def update_existing_contact(id: int, contact: Contact) -> Optional[dict]: 
-    for i in range(len(contacts)):
-        try:
-            if contacts[i].id == id:
-                contacts[i] = contact 
-                return {'contacts': contacts} 
-        except:
-            raise HTTPException(status_code=404, detail="The ID not found")
+def update_existing_contact(id: int, contact: Contact): 
+    try:
+        MannageDB.update(cursor, contact.id, contact.first_name, contact.last_name, contact.phone_number)
+    except:
+        raise HTTPException(status_code=404, detail="The contact not found")
 
 @app.delete('/contacts/{id}')
 def delete_contact(id: int, contact: Contact) -> Optional[dict]:
-    for i in range(len(contacts)):    
-        try:
-            if contacts[i].id == id:
-                contacts.remove(contacts[i])
-                return {"Message": "remove successfully"}
-        except:
-            raise HTTPException(status_code=404, detail="the ID is not found")
+    try:
+        MannageDB.delete
+        return {"Message": "remove successfully"}
+    except:
+        raise HTTPException(status_code=404, detail="the ID is not found")
 
 
 def run_server():

@@ -1,16 +1,14 @@
 from model import Contact
 
 class CreateDB:
-    def init_db(self):
-        self.create_datebase()
-        self.create_table()
-        self.insert_into_db()
-
-    def create_datebase(self) -> str:
+    
+    @staticmethod
+    def create_datebase() -> str:
         create_db = "CREATE DATABASE IF NOT EXISTS contacts_db;" 
         return create_db 
 
-    def create_table(self) -> str:
+    @staticmethod
+    def create_table() -> str:
         table = "USE contacts_db; " \
         "CREATE TABLE IF NOT EXISTS contacts (" \
         "id INT AUTO_INCREMENT PRIMARY KEY, " \
@@ -20,7 +18,8 @@ class CreateDB:
         ");"    
         return table
     
-    def insert_into_db(self) -> str:
+    @staticmethod
+    def insert_into_db() -> str:
         insert_into = "" \
             "INSERT INTO contacts " \
             "(first_name, last_name, phone_number) " \
