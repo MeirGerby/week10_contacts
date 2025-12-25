@@ -23,11 +23,27 @@ class MannageDB:
 
     @staticmethod
     def create_db_and_tables(cursor):  
-        cursor.execute(CreateDB().create_datebase()) 
-        print("create database")
-        cursor.execute(CreateDB().create_table()) 
-        print("create table")
-        cursor.execute(CreateDB().insert_into_db()) 
+        try:
+            create_db: str = CreateDB().create_datebase() 
+            cursor.execute(create_db) 
+            print("database created seccesfully")
+        except:
+            raise ConnectionError("can't create the database")
+        try:
+            create_table: str = CreateDB().create_table()
+            cursor.execute(create_table) 
+            print("table created seccesfully")
+        except:
+            raise ConnectionError("can't create the table")
+            
+        try:
+            create_columns: str = CreateDB().insert_into_db()
+            cursor.execute(create_columns) 
+            print("columns created seccesfully")
+        except:
+            raise ConnectionError("can't create the table")
+            
+        
         
     @staticmethod
     def get_contacts(cursor):
