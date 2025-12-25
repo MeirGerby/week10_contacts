@@ -14,6 +14,7 @@ class DBConnecotor:
     def get_connction(cls):
         if cls._connection:
             if cls._connection.is_connected():
+                print("cennecting to mysql")
                 return cls._connection 
         cls._connection =  cls.connect_to_db() 
 
