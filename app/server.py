@@ -5,6 +5,7 @@ from model import Contact
 from manage_db import MannageDB
 
 cursor = MannageDB.create_corsor()
+MannageDB.create_db_and_tables(cursor)
 
 app = FastAPI()
  
